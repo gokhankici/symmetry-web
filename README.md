@@ -11,3 +11,8 @@
 cd server
 node app.js
 ```
+You can use `curl` for testing:
+
+```sh
+curl -H "Content-Type: application/json" -X POST -d '{"prologFile": <file_input>}' localhost:3000
+```

@@ -7,10 +7,12 @@
     "async": "^2.1.4",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "fs-extra": "^1.0.0",
     "handlebars": "^4.0.6",
     "lodash": "^4.17.2",
     "multer": "^1.2.0",
     "path": "^0.12.7",
+    "printf": "^0.2.5",
     "tmp": "0.0.31",
     "winston": "^2.3.0"
   },
