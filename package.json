@@ -1,0 +1,19 @@
+{
+  "name": "symmetry-web",
+  "version": "1.0.0",
+  "description": "web server/client for the symmetry project",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rami Gokhan Kici",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gokhankici/symmetry-web.git"
+  }
+}
