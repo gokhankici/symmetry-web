@@ -4,7 +4,10 @@
   "description": "web server/client for the symmetry project",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.14.0"
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "handlebars": "^4.0.6",
+    "multer": "^1.2.0"
   },
   "devDependencies": {},
   "scripts": {
