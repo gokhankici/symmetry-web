@@ -1,0 +1,26 @@
+<div id="editor-container" class="container" style="height: 300px;">
+<div id="editor">%% Pr0:
+%%   {()
+%%     send pid(1) (pid(0) :: pid) ();
+%%     recv (x1 :: pid) ()
+%%   }
+%% Pr1:
+%%   {()
+%%     recv (x0 :: pid) ();
+%%     send x0 (pid(1) :: pid) ()
+%%   }
+
+rewrite_query(T,skip,[],Name) :-
+    T = par([seq([send(p0,e_pid(p1),pid,p0),recv(p0,type(pid),x1)]),seq([recv(p1,type(pid),x0),send(p1,e_var(x0),pid,p1)])]),
+    Name = verify.
+
+main :-
+    consult(rewrite),
+    rewrite_query(T,Rem,Ind,Name),
+    catch((check_race_freedom(T,T1);
+           halt(1)),_,halt(2)),
+    catch((rewrite(T1,Rem,Ind,_,_,_);
+           halt(1)),_,halt(2)),
+    halt(0).
+</div>
+</div>
