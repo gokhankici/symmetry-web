@@ -8,6 +8,6 @@
 # Running the server
 
 ```sh
-chdir server
+cd server
 node app.js
 ```
