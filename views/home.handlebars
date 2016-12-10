@@ -1,56 +1,35 @@
 <div class="container">
-
-  <h2>Symmetry</h2>
-  <br>
-
+  <h2>Symmetry</h2> <br/>
   <div class="row">
-    <div class="col-md-6" id="editor1">file 1 input...</div>
-    <div class="col-md-6" id="editor2">file 2 input...</div>
+    <div class="col-md-5">
+      Program 1:
+      <div id="editor1">file 1 input...</div>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+      Program 2:
+      <div id="editor2">file 2 input...</div>
+    </div>
   </div>
 
-  <br/>
-  <button onclick="simpleRequest()">Run</button>
+  <div class="row">
+    <button type="button" class="col-xs-offset-11 col-xs-1 btn btn-success" onclick="simpleRequest()">Run</button>
+  </div>
 
-  <br/> <br/>
-  <textarea id="output1" rows="20" class="col-md-12" readonly>
-  </textarea>
-
+  <div class="row">
+    <textarea id="output1" class="col-xs-12" rows="10" readonly></textarea>
+  </div>
 </div>
 
+<script src="/js/global.js" type="text/javascript"  charset="utf-8"></script>
 <script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-function setupEditor(editorId) {
-  var editor = ace.edit(editorId);
-  editor.setTheme("ace/theme/xcode");
-  editor.getSession().setMode("ace/mode/prolog");
-  editor.setOptions({
-    maxLines: 20,
-    minLines: 20
-  });
-  editor.getSession().setUseWrapMode(true);
-}
 setupEditor("editor1")
 setupEditor("editor2")
 
 function simpleRequest() {
-  const httpRequest = new XMLHttpRequest()
-  if (! httpRequest) {
-    document.getElementById("output1").innerHTML = "CLIENT ERROR !!!"
-  }
-  httpRequest.onreadystatechange = function() {
-    if (httpRequest.readyState === XMLHttpRequest.DONE) {
-      if (httpRequest.status === 200) {
-        document.getElementById("output1").innerHTML = httpRequest.responseText
-      } else {
-        document.getElementById("output1").innerHTML = "SERVER ERROR !!!"
-      }
-    }
-  }
-  httpRequest.open('POST', 'goto.ucsd.edu:8082/test', true)
-  httpRequest.setRequestHeader('Content-Type', 'application/json')
-  httpRequest.send(JSON.stringify({
-    file1: ace.edit("editor1").getValue(),
-    file2: ace.edit("editor2").getValue()
-  }))
+  sendTwoEditors("/test", "editor1", "editor2", (err, text) => {
+    const output = err ? err : text
+    document.getElementById("output1").innerText = output
+  })
 }
 </script>
