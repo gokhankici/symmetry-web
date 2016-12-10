@@ -45,6 +45,13 @@ app.post('/', upload.array(), function (req, res, next) {
   )
 });
 
+app.post('/test', upload.array(), (req, res, next) => {
+  if(! _.has(req, ['body', 'file1']) || ! _.has(req, ['body', 'file2'])) {
+    return res.send('missing prolog file input(s)')
+  }
+  res.send(req.body.file1 + "\n" + req.body.file2)
+})
+
 app.listen(port, function () {
   console.log(printf('symmetry web server listening on port %d ...', port))
 })

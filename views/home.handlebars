@@ -1,26 +1,56 @@
-<div id="editor-container" class="container" style="height: 300px;">
-<div id="editor">%% Pr0:
-%%   {()
-%%     send pid(1) (pid(0) :: pid) ();
-%%     recv (x1 :: pid) ()
-%%   }
-%% Pr1:
-%%   {()
-%%     recv (x0 :: pid) ();
-%%     send x0 (pid(1) :: pid) ()
-%%   }
+<div class="container">
 
-rewrite_query(T,skip,[],Name) :-
-    T = par([seq([send(p0,e_pid(p1),pid,p0),recv(p0,type(pid),x1)]),seq([recv(p1,type(pid),x0),send(p1,e_var(x0),pid,p1)])]),
-    Name = verify.
+  <h2>Symmetry</h2>
+  <br>
 
-main :-
-    consult(rewrite),
-    rewrite_query(T,Rem,Ind,Name),
-    catch((check_race_freedom(T,T1);
-           halt(1)),_,halt(2)),
-    catch((rewrite(T1,Rem,Ind,_,_,_);
-           halt(1)),_,halt(2)),
-    halt(0).
+  <div class="row">
+    <div class="col-md-6" id="editor1">file 1 input...</div>
+    <div class="col-md-6" id="editor2">file 2 input...</div>
+  </div>
+
+  <br/>
+  <button onclick="simpleRequest()">Run</button>
+
+  <br/> <br/>
+  <textarea id="output1" rows="20" class="col-md-12" readonly>
+  </textarea>
+
 </div>
-</div>
+
+<script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+function setupEditor(editorId) {
+  var editor = ace.edit(editorId);
+  editor.setTheme("ace/theme/xcode");
+  editor.getSession().setMode("ace/mode/prolog");
+  editor.setOptions({
+    maxLines: 20,
+    minLines: 20
+  });
+  editor.getSession().setUseWrapMode(true);
+}
+setupEditor("editor1")
+setupEditor("editor2")
+
+function simpleRequest() {
+  const httpRequest = new XMLHttpRequest()
+  if (! httpRequest) {
+    document.getElementById("output1").innerHTML = "CLIENT ERROR !!!"
+  }
+  httpRequest.onreadystatechange = function() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        document.getElementById("output1").innerHTML = httpRequest.responseText
+      } else {
+        document.getElementById("output1").innerHTML = "SERVER ERROR !!!"
+      }
+    }
+  }
+  httpRequest.open('POST', 'goto.ucsd.edu:8082/test', true)
+  httpRequest.setRequestHeader('Content-Type', 'application/json')
+  httpRequest.send(JSON.stringify({
+    file1: ace.edit("editor1").getValue(),
+    file2: ace.edit("editor2").getValue()
+  }))
+}
+</script>
