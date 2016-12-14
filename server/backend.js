@@ -15,8 +15,8 @@ const libraryFiles = [
   "lib/misc.pl"
 ]
 
-const sicstusExe     = "/usr/local/sicstus4.3.3/bin/sicstus"
-const sicstusTimeout = 3 * 1000 // miliseconds
+const sicstusExe     = "sicstus"
+const sicstusTimeout = 1 * 1000 // miliseconds
 
 function checkPrologFile(file, callback) {
   async.waterfall([
@@ -27,11 +27,11 @@ function checkPrologFile(file, callback) {
     // copy library code to temporary folder
     copyLibrary,
     // call sicstus
-    callSicstus
+      callSicstus
   ], (err, state) => {
     if (state & state.tmpdirCleanup) {
       // FIXME: uncomment the following line to delete the temporary folder
-      // state.tmpdirCleanup()
+       state.tmpdirCleanup()
     }
     callback(err, state.response)
   })
@@ -78,11 +78,11 @@ function copyLibrary(state, callback) {
   )
 }
 
+
 // sicstus --noinfo --nologo --goal \"main,halt.\" -l symverify.pl
 function callSicstus(state, callback) {
-  const args = [
-    "--noinfo", "--nologo",
-    "--goal", "'main,halt.'",
+    const args = [
+	"--noinfo", "--nologo",
     "-l", "symverify.pl"
   ]
   execFile(
@@ -94,7 +94,7 @@ function callSicstus(state, callback) {
     (error, stdout, stderr) => {
       const status   = error ? "ERROR" : "OK"
       const output   = error ? stderr  : stdout
-      const response = printf("%s:\n%s", status, output)
+	const response = printf("%s:\n$", output)
       _.assign(state, {response: response})
       callback(null, state)
     }

@@ -1,35 +1,52 @@
-<div class="container">
-  <h2>Symmetry</h2> <br/>
-  <div class="row">
-    <div class="col-md-5">
-      Program 1:
-      <div id="editor1">file 1 input...</div>
-    </div>
-    <div class="col-md-5 col-md-offset-1">
-      Program 2:
-      <div id="editor2">file 2 input...</div>
-    </div>
-  </div>
+<div class="page-wrapper">
+<section class="intro" id="zen-intro">
+  <h1>Brisk: Sequentializing Distributed Programs</h1>
+  <h2>Tutorial</h2>
+<div class="preamble" id="zen-preamble" role="article">
+  <h3>1. Symmetric Sequentialization</h3>
+  Distributed programs are notoriously difficult to get
+  right. Messages are sent asynchronously causing even small programs
+  to have large numbers of possible execution. In this work, we make
+  the following observations: programmers don't mentally case split over all possible
+  executions. Instead, programmers tend to write programs that can be
+  transformed into an equivalent, sequential program which we call the 
+  symmetric sequentialization. We start off with a very simple example. <br>
+  <br>
+<div id="demo">
+  <textarea id="ex1IL" class="input" >
+  p: send  e_pid(m) p;
+  p: recv val</textarea>
+  <textarea id="ex1IR" class="input">
+  m: recv id;
+  m: send  e_var(id) p</textarea>
+      <br> <br>
+    <button class="button"
+  onclick="simpleRequest('ex1IL','ex1IR','ex1O')">Sequentialize</button>
+  <br><br>
+  You can sequentialize the above program by cicking the
+  "sequentialize" button.
+  <br><br>
+  <textarea id="ex1O" class="output">
+  </textarea>
+<h3>2. Loops and Sets of Processes</h3>
+Next, we look at a more complicated program that contains a set of processes that run the same code.
+<br><br>
 
-  <div class="row">
-    <button type="button" class="col-xs-offset-11 col-xs-1 btn btn-success" onclick="simpleRequest()">Run</button>
-  </div>
-
-  <div class="row">
-    <textarea id="output1" class="col-xs-12" rows="10" readonly></textarea>
-  </div>
+<textarea  id="ex2IL" class="linput">for P in s do 
+   m: send e_pid(P) m;
+   m: recvFrom e_pid(P) val
+end</textarea>
+  <textarea id="ex2IR" class="linput">sym P in s do
+   P: recv id;
+   P: send e_var(id) P
+end</textarea>
+      <br> <br>
+    <button class="button"
+  onclick="simpleRequest('ex2IL','ex2IR','ex2O')">Sequentialize</button>
+  <br><br>
+    <textarea id="ex2O" class="output">
+    </textarea>
 </div>
-
-<script src="/js/global.js" type="text/javascript"  charset="utf-8"></script>
-<script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-setupEditor("editor1")
-setupEditor("editor2")
-
-function simpleRequest() {
-  sendTwoEditors("/test", "editor1", "editor2", (err, text) => {
-    const output = err ? err : text
-    document.getElementById("output1").innerText = output
-  })
-}
-</script>
+</div>
+</section>
+</div>	</div>

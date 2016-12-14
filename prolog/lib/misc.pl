@@ -8,7 +8,8 @@
 		 format_atom/3,
 		 copy_instantiate/4,
 		 negate/2, bb_inc/1,
-		 reset_pred_sym/0
+		 reset_pred_sym/0,
+		 web_transform/2
 		], [hidden(true)]).
 :- use_module(library(codesio)).
 :- use_module(library(ordsets)).
@@ -84,6 +85,33 @@ fresh_pred_sym(Sym) :-
 format_atom(Format, Arguments, Atom) :-
 	format_to_codes(Format, Arguments, Codes),
 	atom_codes(Atom, Codes).
+
+
+web_transform(T, T2) :-
+	web_transform0(T, T1),
+	T2=answer(T1).
+
+
+/* Format for website.*/
+web_transform0(T, T1) :-
+	(   atomic(T)->
+	    T1=T
+	;   functor(T, seq, 1)->
+	    T=seq(L),
+	    L=[L0|Ls],
+	    (   foreach(TL, Ls),
+		fromto(L0, In, Out, T1)
+	    do  Out=(In;TL)
+	    )
+	;   compound(T) -> 
+	    functor(T, Sym, Arity)->
+	    functor(T1, Sym, Arity),
+	    (   foreacharg(TI, T),
+		foreacharg(T1I, T1)
+	    do  web_transform(TI, T1I)
+	    )
+	;   T1=T
+	).
 
 /*LIA terms: negation */
 

@@ -6,7 +6,8 @@
 			       substitute_term/4,substitute_term_avl/4,
 			       copy_instantiate/4,get_ord_pairs/2,
 			       negate/2, bb_inc/1,
-			       reset_pred_sym/0
+			       reset_pred_sym/0,
+			       web_transform/2
 			     ]
 	     ).
 
@@ -408,7 +409,7 @@ rewrite_step(T, Gamma, Delta, Rho, Psi, T1, Gamma1, Delta1, Rho1, Psi1) :-
 	  T1=par(skip, sym(Q, S, C1)),
 	  Gamma1=Gamma,
           substitute_term(P, Proc1, Delta2, Delta3),
-	  append(Delta, [for(P, S ,Delta3)], Delta1),
+	  append(Delta, [for(P, S ,seq(Delta3))], Delta1),
           (   avl_delete(Proc1, Psi2, Ext0, Psi3) ->
 	      substitute_term(Q, Proc1, Ext0, Ext),
 	      add_external(Psi3, sym(Q, S, seq(Ext)), S, Psi1)
